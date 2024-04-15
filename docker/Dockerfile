@@ -20,7 +20,9 @@ RUN apt install -y curl nginx supervisor zip unzip git vim mysql-client htop cro
 RUN apt install -y ffmpeg
 RUN apt install -y software-properties-common
 RUN add-apt-repository ppa:ondrej/php
-RUN apt install -y php8.2 php8.2-fpm php8.2-cli php8.2-mysql php8.2-gd php8.2-curl php8.2-bcmath php8.2-mbstring php8.2-mysqli php8.2-redis php8.2-xml php8.2-zip php8.2-intl
+RUN apt install -y php8.2 php8.2-fpm php8.2-cli php8.2-mysql php8.2-gd php8.2-curl php8.2-bcmath php8.2-mbstring php8.2-mysqli php8.2-redis php8.2-xml php8.2-zip php8.2-intl php8.2-xdebug
+# Install XDebug | Only need on DEV mode
+#RUN apt install -y php-xdebug
 
 #Clean
 RUN apt-get -y autoremove
@@ -32,6 +34,9 @@ COPY nginx/default.conf /etc/nginx/sites-available/default
 RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
 
 COPY php.ini /etc/php/8.2/fpm/conf.d/99-app.ini
+# Copy debugger stuff | DEV mode only
+COPY php/conf.d /etc/php/8.2/fpm/conf.d/
+# COPY php/conf.d /etc/php/8.2/fpm/mods-available/
 RUN mkdir -p /var/run/php
 
 # Copy supervisor configuration
